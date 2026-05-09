@@ -1,1 +1,554 @@
-This is a partial course page for DATA 305/475, set up to temporarily replace Nuku. The content here will not be updated once Nuku becomes available again.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DATA305 / DATA475 — Machine Learning Methods · 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:     #0f172a;
+    --teal:     #0d9488;
+    --teal-lt:  #ccfbf1;
+    --teal-dk:  #0f766e;
+    --orange:   #ea580c;
+    --orange-lt:#ffedd5;
+    --orange-dk:#c2410c;
+    --amber:    #d97706;
+    --amber-lt: #fef3c7;
+    --slate:    #64748b;
+    --slate-lt: #f1f5f9;
+    --red-lt:   #fee2e2;
+    --red:      #dc2626;
+    --border:   #e2e8f0;
+    --text:     #1e293b;
+    --muted:    #64748b;
+    --sans: 'DM Sans', sans-serif;
+    --serif: 'DM Serif Display', serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  body { font-family: var(--sans); background: #f8fafc; color: var(--text); line-height: 1.6; font-size: 15px; }
+
+  /* Header */
+  header { background: var(--navy); color: white; padding: 3rem 2rem 2.5rem; }
+  .header-inner { max-width: 1060px; margin: 0 auto; }
+  .course-code { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; color: #94a3b8; text-transform: uppercase; margin-bottom: .5rem; }
+  header h1 { font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 400; line-height: 1.2; color: white; }
+  header h1 em { color: #5eead4; font-style: italic; }
+  .header-meta { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1.25rem; font-size: 13px; color: #94a3b8; }
+  .header-meta span { display: flex; align-items: center; gap: .4rem; }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: #5eead4; display: inline-block; }
+  .notice { margin-top: 1.25rem; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: .7rem 1rem; font-size: 13px; color: #cbd5e1; max-width: 680px; }
+
+  /* Main */
+  main { max-width: 1060px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+  /* Legend */
+  .legend { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; font-size: 12.5px; color: var(--muted); }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Schedule container */
+  .schedule { display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: white; }
+
+  /* Break divider */
+  .break-row { background: var(--navy); display: flex; align-items: center; padding: .75rem 1.25rem; gap: .75rem; }
+  .break-label { font-family: var(--mono); font-size: 11.5px; letter-spacing: .1em; color: #5eead4; text-transform: uppercase; }
+  .break-dates { font-size: 12px; color: #64748b; }
+
+  /* Week row grid */
+  .week-row { display: grid; grid-template-columns: 100px 1fr 1fr 1fr 200px; border-top: 1px solid var(--border); }
+  .week-row:first-child { border-top: none; }
+
+  .week-label { padding: 1rem 1.25rem; border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: flex-start; gap: 2px; background: #f8fafc; }
+  .week-num { font-family: var(--mono); font-size: 11px; letter-spacing: .08em; color: var(--slate); text-transform: uppercase; }
+  .week-dates { font-size: 11.5px; color: var(--muted); line-height: 1.4; }
+
+  /* Day cells */
+  .day-cell { padding: .9rem 1rem; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+  .day-label { font-size: 10.5px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: #94a3b8; margin-bottom: 2px; }
+
+  /* Tutorial cell */
+  .tutorial-cell { padding: .9rem 1rem; background: #f8fafc; display: flex; flex-direction: column; gap: 6px; border-left: 1px solid var(--border); }
+
+  /* Lecture block */
+  .lec { display: flex; flex-direction: column; gap: 3px; }
+  .lec-num { font-family: var(--mono); font-size: 10.5px; color: var(--muted); letter-spacing: .05em; }
+  .lec-title { font-size: 13px; font-weight: 500; line-height: 1.35; color: var(--text); }
+
+  /* Tentative / subject-to-changes variant */
+  .lec.tentative .lec-num   { color: #b0bec5; }
+  .lec.tentative .lec-title { color: #94a3b8; font-weight: 400; font-style: italic; }
+  .tentative-note {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 10.5px; color: #b0bec5; font-style: italic; margin-top: 1px;
+  }
+  .tentative-note::before { content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: #d1d5db; flex-shrink: 0; }
+
+  /* Link button row */
+  .link-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 3px; }
+  .btn { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 500; padding: 3px 8px; border-radius: 4px; text-decoration: none; transition: background .15s; width: fit-content; white-space: nowrap; }
+  .btn svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .btn.slides       { background: var(--teal-lt); color: var(--teal-dk); }
+  .btn.slides:hover { background: #99f6e4; }
+  .btn.colab        { background: var(--orange-lt); color: var(--orange-dk); }
+  .btn.colab:hover  { background: #fed7aa; }
+  .btn.soon         { background: var(--slate-lt); color: #94a3b8; cursor: default; pointer-events: none; }
+
+  /* Special cells */
+  .special-cell { padding: .9rem 1rem; border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; gap: 5px; }
+  .tag { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; padding: 4px 9px; border-radius: 4px; width: fit-content; font-weight: 500; }
+  .tag.holiday  { background: var(--red-lt);   color: var(--red);   }
+  .tag.closed   { background: var(--red-lt);   color: var(--red);   }
+  .tag.guest    { background: var(--amber-lt); color: var(--amber); }
+  .tag.midterm  { background: #ede9fe; color: #5b21b6; }
+  .tag-note    { font-size: 11px; color: var(--muted); }
+
+  /* Tutorial elements */
+  .tut-tag { display: inline-flex; font-family: var(--mono); font-size: 10.5px; background: #ede9fe; color: #6d28d9; padding: 2px 7px; border-radius: 4px; font-weight: 500; letter-spacing: .04em; width: fit-content; margin-bottom: 2px; }
+  .tut-title  { font-size: 12.5px; font-weight: 500; color: var(--text); line-height: 1.35; }
+  .tut-covers { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .assess-badges { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+  .badge { font-size: 10.5px; padding: 2px 7px; border-radius: 3px; font-weight: 500; }
+  .badge.released { background: #dcfce7; color: #15803d; }
+  .badge.due      { background: #fef9c3; color: #854d0e; }
+  .shared-note { font-size: 10.5px; color: var(--muted); font-style: italic; margin-top: 1px; }
+
+  /* Footer */
+  footer { max-width: 1060px; margin: 0 auto; padding: 1.5rem 1.5rem 3rem; font-size: 12px; color: var(--muted); border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: .4rem; }
+  .footer-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem; }
+  .footer-credit { margin-top: .5rem; font-size: 11.5px; color: #94a3b8; border-top: 1px solid var(--border); padding-top: .75rem; }
+  .footer-credit a { color: #94a3b8; text-decoration: underline; text-underline-offset: 2px; }
+
+  @media (max-width: 820px) {
+    .week-row { grid-template-columns: 80px 1fr 1fr; grid-template-rows: auto auto; }
+    .tutorial-cell { grid-column: 1 / -1; border-left: none; border-top: 1px solid var(--border); }
+  }
+  @media (max-width: 560px) {
+    .week-row { grid-template-columns: 1fr; }
+    .week-label { border-right: none; border-bottom: 1px solid var(--border); }
+    .day-cell { border-right: none; border-top: 1px solid var(--border); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="course-code">Victoria University of Wellington · 2026</div>
+    <h1>DATA305 / DATA475<br><em>Machine Learning Methods</em></h1>
+    <div class="header-meta">
+      <span><span class="dot"></span> 20 Lectures</span>
+      <span><span class="dot"></span> 7 Tutorials</span>
+      <span><span class="dot"></span> 8 Teaching Weeks</span>
+      <span><span class="dot"></span> Python · TensorFlow/Keras · Google Colab</span>
+    </div>
+    <div class="notice">
+      This is a partial course page set up to temporarily replace Nuku. Slides and Colab notebooks are added progressively as lectures are delivered.
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#0d9488"></div> Slides &amp; notebook available</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#cbd5e1"></div> Not yet released</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#b0bec5;border:1.5px dashed #94a3b8"></div> Subject to changes</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#d97706"></div> Guest / special session</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#dc2626"></div> No lecture</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6d28d9"></div> Tutorial</div>
+  </div>
+
+  <div class="schedule">
+
+    <!-- WEEK 5 -->
+    <div class="week-row">
+      <div class="week-label">
+        <div class="week-num">Week 5</div>
+        <div class="week-dates">24–27 Mar</div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Tue</div>
+        <div class="lec">
+          <div class="lec-num">L01</div>
+          <div class="lec-title">Deep Learning in the Real World</div>
+          <div class="link-row">
+            <a class="btn slides" href="https://ngphubinh.github.io/data305_2026/L1_Deep_Learning_in_the_Real_World.pdf" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h8M10 5l3 3-3 3"/></svg>Slides</a>
+            <a class="btn colab" href="https://colab.research.google.com/drive/1onD5188546Uf4gT7wG2eat-Sa7Cb-pl9?usp=sharing" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+          </div>
+        </div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Wed</div>
+        <div class="lec">
+          <div class="lec-num">L02</div>
+          <div class="lec-title">From Perceptron to MLP</div>
+          <div class="link-row">
+            <a class="btn slides" href="https://ngphubinh.github.io/data305_2026/L2_From_Perceptron_to_MLP.pdf" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h8M10 5l3 3-3 3"/></svg>Slides</a>
+            <a class="btn colab" href="https://colab.research.google.com/drive/1WKNNRb-It2BcB5VDz9_AHtFsGgKQsxBk?usp=sharing" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+          </div>
+        </div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Fri</div>
+        <div class="lec">
+          <div class="lec-num">L03</div>
+          <div class="lec-title">Keras API Deep Dive</div>
+          <div class="link-row">
+            <a class="btn slides" href="https://ngphubinh.github.io/data305_2026/L3_Keras_API_Deep_Dive.pdf" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h8M10 5l3 3-3 3"/></svg>Slides</a>
+            <a class="btn colab" href="https://colab.research.google.com/drive/1bvrH8MAjHZ3yOimX237CvI_lNhI7u3CH?usp=sharing" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+          </div>
+        </div>
+      </div>
+      <div class="tutorial-cell">
+        <div class="tut-covers" style="margin-top:2px">No tutorial this week</div>
+      </div>
+    </div>
+
+    <!-- WEEK 6 -->
+    <div class="week-row">
+      <div class="week-label">
+        <div class="week-num">Week 6</div>
+        <div class="week-dates">31 Mar –<br>3 Apr</div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Tue</div>
+        <div class="lec">
+          <div class="lec-num">L04</div>
+          <div class="lec-title">Training Deep Networks I</div>
+          <div class="link-row">
+            <a class="btn slides" href="https://ngphubinh.github.io/data305_2026/L4_Training_Deep_Networks_I.pdf" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h8M10 5l3 3-3 3"/></svg>Slides</a>
+            <a class="btn colab" href="https://colab.research.google.com/drive/1J8X7YLNqg6IlcWycfdEp_nF8Dx6pxzij?usp=sharing" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+          </div>
+        </div>
+      </div>
+      <div class="special-cell" style="border-right:1px solid var(--border)">
+        <div class="day-label">Wed</div>
+        <div class="tag midterm">✏️ Mid-term Test</div>
+      </div>
+      <div class="special-cell">
+        <div class="day-label">Fri</div>
+        <div class="tag holiday">🏛 Public Holiday</div>
+      </div>
+      <div class="tutorial-cell">
+        <div class="tut-tag">T1</div>
+        <div class="tut-title">Keras Workflow End-to-End</div>
+        <div class="tut-covers">Covers L01–L03</div>
+        <div class="link-row">
+          <!-- TODO: replace href with real Colab URL for T1 -->
+          <a class="btn colab" href="#" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- MID-SEMESTER BREAK -->
+    <div class="break-row">
+      <div class="break-label">Mid-Semester Break</div>
+      <div class="break-dates">6 – 17 April 2026</div>
+    </div>
+
+    <!-- WEEK 7 -->
+    <div class="week-row">
+      <div class="week-label">
+        <div class="week-num">Week 7</div>
+        <div class="week-dates">20–24 Apr</div>
+      </div>
+      <div class="special-cell" style="border-right:1px solid var(--border)">
+        <div class="day-label">Tue</div>
+        <div class="tag closed">🔒 University Closed</div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Wed</div>
+        <div class="lec">
+          <div class="lec-num">L05</div>
+          <div class="lec-title">Training Deep Networks II</div>
+          <div class="link-row">
+            <a class="btn slides" href="https://ngphubinh.github.io/data305_2026/L5_Training_Deep_Networks_II.pdf" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h8M10 5l3 3-3 3"/></svg>Slides</a>
+            <a class="btn colab" href="https://colab.research.google.com/drive/1Es5tWEN3t8w0j8IVt_4eGIeKMFcqCAxL?usp=sharing" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+          </div>
+        </div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Fri</div>
+        <div class="lec">
+          <div class="lec-num">L06</div>
+          <div class="lec-title">Data Pipelines &amp; Preprocessing</div>
+          <div class="link-row">
+            <a class="btn slides" href="https://ngphubinh.github.io/data305_2026/L6_Data_Pipelines.pdf" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h8M10 5l3 3-3 3"/></svg>Slides</a>
+            <a class="btn colab" href="https://colab.research.google.com/drive/1Sy8j-WtJPA_GFFjsuX7OQ73SXH_PZTNH?usp=sharing" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+          </div>
+        </div>
+      </div>
+      <div class="tutorial-cell">
+        <div class="tut-tag">T2</div>
+        <div class="tut-title">Training Deep Networks</div>
+        <div class="tut-covers">Covers L04</div>
+        <div class="link-row">
+          <!-- TODO: replace href with real Colab URL for T2 -->
+          <a class="btn colab" href="#" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+        </div>
+        <div class="assess-badges">
+          <span class="badge released">Assignment released</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 8 -->
+    <div class="week-row">
+      <div class="week-label">
+        <div class="week-num">Week 8</div>
+        <div class="week-dates">27 Apr –<br>1 May</div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Tue</div>
+        <div class="lec">
+          <div class="lec-num">L07</div>
+          <div class="lec-title">CNN Fundamentals</div>
+          <div class="link-row">
+            <a class="btn slides" href="https://ngphubinh.github.io/data305_2026/L7_CNN_Fundamentals.pdf" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h8M10 5l3 3-3 3"/></svg>Slides</a>
+            <a class="btn colab" href="https://colab.research.google.com/drive/1wDw-ay-nDPvpkNe12Cv7AMUSeWxJ0rqC?usp=sharing" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+          </div>
+        </div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Wed</div>
+        <div class="lec">
+          <div class="lec-num">L08</div>
+          <div class="lec-title">CNN Architectures</div>
+          <div class="link-row">
+            <a class="btn slides" href="https://ngphubinh.github.io/data305_2026/L8_CNN_Architectures.pdf" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h8M10 5l3 3-3 3"/></svg>Slides</a>
+            <a class="btn colab" href="https://colab.research.google.com/drive/1Jvqw4vgHXL0HUZtaD6HLeeCWvP_iuul6?usp=sharing" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+          </div>
+        </div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Fri</div>
+        <div class="lec">
+          <div class="lec-num">L09</div>
+          <div class="lec-title">Transfer Learning &amp; Fine-Tuning</div>
+          <div class="link-row">
+            <a class="btn slides" href="https://ngphubinh.github.io/data305_2026/L9_Transfer_Learning.pdf" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h8M10 5l3 3-3 3"/></svg>Slides</a>
+            <a class="btn colab" href="https://colab.research.google.com/drive/1Mz4UcqIq23Tf7vXZeLr2KKzrSuMVMdpN?usp=sharing" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+          </div>
+        </div>
+      </div>
+      <div class="tutorial-cell">
+        <div class="tut-tag">T3</div>
+        <div class="tut-title">Optimisers, LR Scheduling &amp; Data Pipelines</div>
+        <div class="tut-covers">Covers L05–L06</div>
+        <div class="link-row">
+          <!-- TODO: replace href with real Colab URL for T3 -->
+          <a class="btn colab" href="#" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 9 -->
+    <div class="week-row">
+      <div class="week-label">
+        <div class="week-num">Week 9</div>
+        <div class="week-dates">4–8 May</div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Tue</div>
+        <div class="lec">
+          <div class="lec-num">L10</div>
+          <div class="lec-title">Object Detection</div>
+          <div class="link-row">
+            <a class="btn slides" href="https://ngphubinh.github.io/data305_2026/L10_Object_Detection.pdf" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h8M10 5l3 3-3 3"/></svg>Slides</a>
+            <a class="btn colab" href="https://colab.research.google.com/drive/1mWadSI7oZup6u7VDQ1fycb4gCDgPJGoD?usp=sharing" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+          </div>
+        </div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Wed</div>
+        <div class="lec">
+          <div class="lec-num">L11</div>
+          <div class="lec-title">Image Segmentation <span style="font-size:11px;font-weight:400;color:var(--muted)">(Part 1)</span></div>
+          <div class="link-row">
+            <a class="btn slides" href="https://ngphubinh.github.io/data305_2026/L11-12_Image_Segmentation.pdf" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h8M10 5l3 3-3 3"/></svg>Slides</a>
+            <a class="btn colab" href="https://colab.research.google.com/drive/12zQWKv4W4tMQCgPvf0uL5xfQVU8RVDTy?usp=sharing" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+          </div>
+        </div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Fri</div>
+        <div class="lec">
+          <div class="lec-num">L12</div>
+          <div class="lec-title">Image Segmentation <span style="font-size:11px;font-weight:400;color:var(--muted)">(Part 2)</span></div>
+          <div class="link-row">
+            <a class="btn slides" href="https://ngphubinh.github.io/data305_2026/L11-12_Image_Segmentation.pdf" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h8M10 5l3 3-3 3"/></svg>Slides</a>
+            <a class="btn colab" href="https://colab.research.google.com/drive/12zQWKv4W4tMQCgPvf0uL5xfQVU8RVDTy?usp=sharing" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+          </div>
+          <div class="shared-note">Same slide deck &amp; notebook as L11</div>
+        </div>
+      </div>
+      <div class="tutorial-cell">
+        <div class="tut-tag">T4</div>
+        <div class="tut-title">CNNs, Architectures &amp; Transfer Learning</div>
+        <div class="tut-covers">Covers L07–L09</div>
+        <div class="link-row">
+          <!-- TODO: replace href with real Colab URL for T4 -->
+          <a class="btn colab" href="#" target="_blank"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h10M3 8h6M3 12h8"/></svg>Colab</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 10 -->
+    <div class="week-row">
+      <div class="week-label">
+        <div class="week-num">Week 10</div>
+        <div class="week-dates">11–15 May</div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Tue</div>
+        <div class="lec">
+          <div class="lec-num">L13</div>
+          <div class="lec-title">Sequence Modeling I — Forecasting Setup</div>
+          <div class="link-row">
+            <span class="btn soon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2 2"/></svg>Coming soon</span>
+          </div>
+        </div>
+      </div>
+      <div class="special-cell" style="border-right:1px solid var(--border)">
+        <div class="day-label">Wed</div>
+        <div class="tag guest">🎤 Revision Lecture</div>
+        <div class="tag-note">By Stephen</div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Fri</div>
+        <div class="lec">
+          <div class="lec-num">L14</div>
+          <div class="lec-title">Sequence Modeling II — LSTM, GRU &amp; Better Memory</div>
+          <div class="link-row">
+            <span class="btn soon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2 2"/></svg>Coming soon</span>
+          </div>
+        </div>
+      </div>
+      <div class="tutorial-cell">
+        <div class="tut-tag">T5</div>
+        <div class="tut-title">Object Detection &amp; Image Segmentation</div>
+        <div class="tut-covers">Covers L10–L12</div>
+        <div class="assess-badges">
+          <span class="badge due">Assignment due</span>
+          <span class="badge released">Project released</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEK 11 -->
+    <div class="week-row">
+      <div class="week-label">
+        <div class="week-num">Week 11</div>
+        <div class="week-dates">18–22 May</div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Tue</div>
+        <div class="lec tentative">
+          <div class="lec-num">L15</div>
+          <div class="lec-title">Text Representation &amp; Classification</div>
+          <div class="tentative-note">Subject to changes</div>
+          <div class="link-row">
+            <span class="btn soon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2 2"/></svg>Coming soon</span>
+          </div>
+        </div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Wed</div>
+        <div class="lec tentative">
+          <div class="lec-num">L16</div>
+          <div class="lec-title">Attention &amp; Transformer Intuition</div>
+          <div class="tentative-note">Subject to changes</div>
+          <div class="link-row">
+            <span class="btn soon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2 2"/></svg>Coming soon</span>
+          </div>
+        </div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Fri</div>
+        <div class="lec tentative">
+          <div class="lec-num">L17</div>
+          <div class="lec-title">Pretrained Language Models</div>
+          <div class="tentative-note">Subject to changes</div>
+          <div class="link-row">
+            <span class="btn soon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2 2"/></svg>Coming soon</span>
+          </div>
+        </div>
+      </div>
+      <div class="tutorial-cell">
+        <div class="tut-tag">T6</div>
+        <div class="tut-title" style="color:#94a3b8;font-weight:400;font-style:italic;">Jena Climate Deep-Dive</div>
+        <div class="tut-covers">Covers L13–L14</div>
+        <div class="tentative-note">Subject to changes</div>
+      </div>
+    </div>
+
+    <!-- WEEK 12 -->
+    <div class="week-row">
+      <div class="week-label">
+        <div class="week-num">Week 12</div>
+        <div class="week-dates">25–29 May</div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Tue</div>
+        <div class="lec tentative">
+          <div class="lec-num">L18</div>
+          <div class="lec-title">Adapting Pretrained Models</div>
+          <div class="tentative-note">Subject to changes</div>
+          <div class="link-row">
+            <span class="btn soon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2 2"/></svg>Coming soon</span>
+          </div>
+        </div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Wed</div>
+        <div class="lec tentative">
+          <div class="lec-num">L19</div>
+          <div class="lec-title">Prompting &amp; Retrieval-Augmented Generation</div>
+          <div class="tentative-note">Subject to changes</div>
+          <div class="link-row">
+            <span class="btn soon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2 2"/></svg>Coming soon</span>
+          </div>
+        </div>
+      </div>
+      <div class="day-cell">
+        <div class="day-label">Fri</div>
+        <div class="lec">
+          <div class="lec-num">L20</div>
+          <div class="lec-title">Revision + Wrap-Up</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">No new assessed content</div>
+          <div class="link-row">
+            <span class="btn soon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2 2"/></svg>Coming soon</span>
+          </div>
+        </div>
+      </div>
+      <div class="tutorial-cell">
+        <div class="tut-tag">T7</div>
+        <div class="tut-title" style="color:#94a3b8;font-weight:400;font-style:italic;">Text Classification &amp; Transformer Mechanics</div>
+        <div class="tut-covers">Covers L15–L17</div>
+        <div class="tentative-note">Subject to changes</div>
+        <div class="assess-badges">
+          <span class="badge due">Project due</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.schedule -->
+</main>
+
+<footer>
+  <div class="footer-top">
+    <div>DATA305 / DATA475 · Machine Learning Methods · Victoria University of Wellington · 2026</div>
+    <div>Binh Nguyen · School of Mathematics and Statistics</div>
+  </div>
+  <div class="footer-credit">
+    Web page built by <a href="https://claude.ai" target="_blank">Claude</a> (Anthropic). Designed, revised and updated by Binh Nguyen.
+  </div>
+</footer>
+
+</body>
+</html>
